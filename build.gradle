@@ -1,0 +1,69 @@
+
+/*
+ * For plugin "clojure", tell Gradle where to get clojuresque
+ */
+buildscript {
+    repositories {
+        maven { url 'http://clojars.org/repo' }
+    }
+    dependencies {
+        classpath 'clojuresque:clojuresque:1.5.8'
+    }
+}
+apply plugin: "clojure"
+
+repositories {
+    mavenCentral()
+    clojarsRepo()
+}
+
+dependencies {
+    compile 'org.clojure:clojure:1.6.0'
+}
+
+// You must enable AOT (Ahead-of-Time) compilation in order to
+//  use a Clojure class as the main class.
+// AOT compilation is version-sensitive; you will need to run this
+//  with the exact same version of Clojure as it was compiled with.
+aotCompile = true
+
+// The "application" plugin offers a "run" task:
+apply plugin: "application"
+mainClassName = "example"
+
+jar {
+    manifest {
+        attributes "Main-Class": "example"
+    }
+}
+
+// uberjar will put all required classes into a single Jar.
+uberjar.enabled = true
+//- configurations.compile.transitive = true
+uberjar {
+    manifest {
+        attributes "Main-Class": "example"
+    }
+}
+
+/*
+ * gradle wrapper
+ * 
+ * Running this task will create a Gradle wrapper script, named
+ * gradlew or gradlew.bat. Once created, the "gradlew" wrapper is
+ * useful for developers who may not have a local gradle installed.
+ * 
+ * Created during project setup.  Normal usage does not need to
+ * re-run this task.  But if you do, we specify a distributionUrl
+ * to allow older gradles (<1.0) to invoke this task.
+ *
+ * http://www.gradle.org/docs/current/userguide/gradle_wrapper.html
+ */ 
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+
+    // Gradles before v1.0 used a different repo, undesirable now:
+    if (distributionUrl.startsWith("http://repo.gradle.org/gradle/distributions/")) {
+        distributionUrl = "http://services.gradle.org/distributions/gradle-${gradleVersion}-bin.zip"
+    }
+}

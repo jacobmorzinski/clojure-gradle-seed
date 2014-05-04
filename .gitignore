@@ -1,11 +1,8 @@
-pom.xml
-pom.xml.asc
-*jar
-/lib/
-/classes/
-/target/
-/checkouts/
-.lein-deps-sum
-.lein-repl-history
-.lein-plugins/
-.lein-failures
+# Please see https://github.com/github/gitignore for some nice presets
+
+# Emacs backup files
+*~
+
+# Gradle
+.gradle
+build/
